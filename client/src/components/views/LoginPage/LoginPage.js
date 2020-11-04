@@ -70,13 +70,11 @@ function LoginPage(props) {
         const {
           values,
           touched,
-          errors,
-          dirty,
+          errors,          
           isSubmitting,
           handleChange,
           handleBlur,
-          handleSubmit,
-          handleReset,
+          handleSubmit,          
         } = props;
         return (
           <div className="app">
