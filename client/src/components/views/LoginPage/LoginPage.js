@@ -25,7 +25,8 @@ function LoginPage(props) {
     <Formik
       initialValues={{
         email: initialEmail,
-        password: '',
+        password: '123456',
+        //password: '',
       }}
       validationSchema={Yup.object().shape({
         email: Yup.string()
