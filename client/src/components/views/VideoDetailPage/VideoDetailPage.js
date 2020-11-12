@@ -1,6 +1,7 @@
 import React, {useEffect, useState} from 'react'
 import {Row, Col, List, Avatar} from 'antd'
 import Axios from 'axios'
+import SideVideo from './Sections/SideVideo'
 
 function VideoDetailPage(props) {
 
@@ -26,8 +27,9 @@ function VideoDetailPage(props) {
             <div>
                 <Row gutter={[16,16]}>
                     <Col lg={18} xs={24}>
-    
-                        <div style={{width: '100%', padding:'3rem 4rem'}}>
+                        
+                        <div style={{width: '100%', padding:'3rem 4rem'}}>                        
+                        <span style={{ fontSize: '1rem', color: 'gray' }}>{VideoDetail.title}  </span><br />
                             <video style={{width: '100%' }} src={`http://localhost:5000/${VideoDetail.filePath}`} controls />
     
                             <List.Item actions >
@@ -46,7 +48,7 @@ function VideoDetailPage(props) {
     
                     </Col>
                     <Col lg={6} xs={24}>
-                        Side Video
+                        <SideVideo />
                     </Col>
                 </Row>
                 
