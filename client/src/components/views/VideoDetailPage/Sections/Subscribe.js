@@ -17,8 +17,7 @@ function Subscribe(props) {
 
         Axios.post('/api/subscribe/subscribeNumber', variable )
         .then( response=> {
-            if(response.data.success) {
-        
+            if(response.data.success) {        
              
                 setSubscribeNumber(response.data.subscribeNumber)
 
@@ -31,11 +30,8 @@ function Subscribe(props) {
         
         Axios.post('/api/subscribe/subscribed' , subscribeVariable)
         .then(response => {
-            if(response.data.success) {
-                
-                setSubscribed(response.data.subscribed)
-                console.log(response.data.subscribed)
-                console.log(Subscribed)
+            if(response.data.success) {                
+                setSubscribed(response.data.subscribed)                
             } else {
                 alert('정보를 받아오지 못했습니다.')
             }   
