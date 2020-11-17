@@ -4,12 +4,13 @@ import Axios from 'axios'
 import SideVideo from './Sections/SideVideo'
 import Subscribe from './Sections/Subscribe'
 import Comment from './Sections/Comment'
+import LikeDislikes from './Sections/LikeDislikes'
 
 
 function VideoDetailPage(props) {
 
 
-    const [Comments, setComments] = useState("")
+    const [CommentLists, setCommentLists] = useState("")
     const [VideoDetail, setVideoDetail] = useState([])
     const videoId = props.match.params.videoId
     const variable = {videoId: videoId}
@@ -32,7 +33,7 @@ function VideoDetailPage(props) {
         .then(response => {
             if(response.data.success) {
                                 
-                setComments(response.data.comments)
+                setCommentLists(response.data.comments)
 
             } else {               
                 alert("코멘트 정보를 가져오는데 실패")
@@ -44,7 +45,7 @@ function VideoDetailPage(props) {
     
     const refreshFunction = (newComment) => {
 
-        setComments(Comments.concat(newComment))
+        setCommentLists(CommentLists.concat(newComment))
 
     }
 
@@ -62,7 +63,9 @@ function VideoDetailPage(props) {
                             <video style={{width: '100%' }} src={`http://localhost:5000/${VideoDetail.filePath}`} controls />
     
                             <List.Item 
-                                actions= {[subscribeButton]}
+                                actions= {[<LikeDislikes video userId={localStorage.getItem('userId')}
+                                 videoId={videoId}
+                                /> , subscribeButton]}
                             >
     
                                 <List.Item.Meta 
@@ -74,7 +77,7 @@ function VideoDetailPage(props) {
                             </List.Item>
     
                             {/* {Comments} */}
-                            <Comment refreshFunction={refreshFunction} commentLists={Comments} postId={videoId}/>
+                            <Comment refreshFunction={refreshFunction} CommentLists={CommentLists} postId={videoId}/>
     
                         </div>
     

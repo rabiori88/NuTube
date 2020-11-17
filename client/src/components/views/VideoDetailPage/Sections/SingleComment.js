@@ -2,6 +2,7 @@ import React, { useState } from 'react'
 import { Comment, Avatar, Button, Input } from 'antd';
 import Axios from 'axios';
 import { useSelector } from 'react-redux';
+import LikeDislikes from './LikeDislikes';
 
 const { TextArea } = Input;
 function SingleComment(props) {
@@ -31,6 +32,7 @@ function SingleComment(props) {
             .then(response => {
                 if (response.data.success) {
                     setCommentValue("")
+                    setOpenReply(false)
                     props.refreshFunction(response.data.result)
                     console.log(response.data.result)
                 } else {
@@ -46,7 +48,8 @@ function SingleComment(props) {
     }
 
     const actions = [
-        <span onClick={onClickReplyOpen} key="comment-basic-reply-to" >Reply to</span>
+        <LikeDislikes userid={localStorage.getItem('user')} commentId={props.comment._id} />
+        ,<span onClick={onClickReplyOpen} key="comment-basic-reply-to" >Reply to</span>
     ]
     
     return (
