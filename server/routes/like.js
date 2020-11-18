@@ -2,71 +2,98 @@ const express = require('express');
 const router = express.Router();
 const { Like } = require("../models/Like");
 const { DisLike } = require("../models/DisLike");
-const Dislike = require('../models/DisLike');
-
 
 //=================================
 //             Like
 //=================================
 
 
-
-
 router.post("/upLike", (req, res) => {
 
     let variable = {}
-
-    if(req.body.videoId) {
-        variable = {videoId: req.body.videoId}
+    if (req.body.videoId) {
+        variable = { videoId: req.body.videoId, userId: req.body.userId }
     } else {
-        variable = {videoId: req.body.commentId}
+        variable = { commentId: req.body.commentId , userId: req.body.userId }
     }
 
-   //like Collection에다가 클릭 정보를 넣어준다 
+    const like = new Like(variable)
+    //save the like information data in MongoDB
+    like.save((err, likeResult) => {
+        if (err) return res.json({ success: false, err });
+        //In case disLike Button is already clicked, we need to decrease the dislike by 1 
+        DisLike.findOneAndDelete(variable)
+            .exec((err, disLikeResult) => {
+                if (err) return res.status(400).json({ success: false, err });
+                res.status(200).json({ success: true })
+            })
+    })
 
-   const like = new Like(variable)
+})
 
-   like.save((err, likeReulst) => {
-       if(err) return resjson({success : false, err })
 
-       //만약에 Dislike이 이미 클릭이 되있다면, Dislike 1 줄여준다.
+router.post("/unLike", (req, res) => {
 
-       DisLike.findByIdAndDelete(variable)
-       .exec((err, disLikeResult ) => {
-           if(err) return res.status(400).json({success : false, err})
-           res.status(200).json({success: true})
-       }) 
-   })   
+    let variable = {}
+    if (req.body.videoId) {
+        variable = { videoId: req.body.videoId, userId: req.body.userId }
+    } else {
+        variable = { commentId: req.body.commentId , userId: req.body.userId }
+    }
+
+    Like.findOneAndDelete(variable)
+        .exec((err, result) => {
+            if (err) return res.status(400).json({ success: false, err })
+            res.status(200).json({ success: true })
+        })
 
 })
 
 router.post("/upDisLike", (req, res) => {
 
     let variable = {}
-
-    if(req.body.videoId) {
-        variable = {videoId: req.body.videoId}
+    if (req.body.videoId) {
+        variable = { videoId: req.body.videoId, userId: req.body.userId }
     } else {
-        variable = {videoId: req.body.commentId}
+        variable = { commentId: req.body.commentId , userId: req.body.userId }
     }
 
-   //like Collection에다가 클릭 정보를 넣어준다 
+    const disLike = new DisLike(variable)
+    //save the like information data in MongoDB
+    disLike.save((err, dislikeResult) => {
+        if (err) return res.json({ success: false, err });
+        //In case Like Button is already clicked, we need to decrease the like by 1 
+        Like.findOneAndDelete(variable)
+            .exec((err, likeResult) => {
+                if (err) return res.status(400).json({ success: false, err });
+                res.status(200).json({ success: true })
+            })
+    })
 
-   const dislike = new DisLike(variable)
-
-   dislike.save((err, likeReulst) => {
-       if(err) return resjson({success : false, err })
-
-       //만약에 Dislike이 이미 클릭이 되있다면, Dislike 1 줄여준다.
-
-       Like.findByIdAndDelete(variable)
-       .exec((err, LikeResult ) => {
-           if(err) return res.status(400).json({success : false, err})
-           res.status(200).json({success: true})
-       }) 
-   })   
 
 })
+
+
+
+router.post("/unDisLike", (req, res) => {
+
+    let variable = {}
+    if (req.body.videoId) {
+        variable = { videoId: req.body.videoId, userId: req.body.userId }
+    } else {
+        variable = { commentId: req.body.commentId , userId: req.body.userId }
+    }
+
+    DisLike.findOneAndDelete(variable)
+    .exec((err, result) => {
+        if (err) return res.status(400).json({ success: false, err })
+        res.status(200).json({ success: true })
+    })
+
+
+
+})
+
 
 
 router.post("/getLikes", (req, res) => {
